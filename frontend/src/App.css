@@ -55,12 +55,14 @@ body {
   font-family: 'JetBrains Mono', 'Courier New', monospace;
 }
 
-/* Enhanced Glass Morphism Effects */
+/* Enhanced Glass Morphism Effects with GPU acceleration */
 .glass-nav {
   background: rgba(0, 0, 0, 0.85);
   backdrop-filter: blur(20px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   transition: all 0.3s ease;
+  will-change: background, backdrop-filter;
+  transform: translateZ(0);
 }
 
 .glass-card {
@@ -71,6 +73,8 @@ body {
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   position: relative;
   overflow: hidden;
+  will-change: transform, background, border-color, box-shadow;
+  transform: translateZ(0);
 }
 
 .glass-card::before {
@@ -83,6 +87,7 @@ body {
   background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
   opacity: 0;
   transition: opacity 0.3s ease;
+  will-change: opacity;
 }
 
 .glass-card:hover::before {
@@ -92,7 +97,7 @@ body {
 .glass-card:hover {
   background: rgba(255, 255, 255, 0.1);
   border-color: rgba(255, 255, 255, 0.25);
-  transform: translateY(-4px);
+  transform: translateY(-4px) translateZ(0);
   box-shadow: 0 16px 48px rgba(0, 0, 0, 0.3), 0 0 32px rgba(255, 255, 255, 0.1);
 }
 
