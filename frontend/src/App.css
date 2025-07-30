@@ -308,11 +308,13 @@ body {
   width: 100%;
 }
 
-/* Enhanced Project Cards */
+/* Enhanced Project Cards with GPU acceleration */
 .project-card {
   overflow: hidden;
   transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   position: relative;
+  will-change: transform, box-shadow;
+  transform: translateZ(0);
 }
 
 .project-card::after {
@@ -326,6 +328,7 @@ body {
   opacity: 0;
   transition: opacity 0.5s ease;
   pointer-events: none;
+  will-change: opacity;
 }
 
 .project-card:hover::after {
@@ -333,7 +336,7 @@ body {
 }
 
 .project-card:hover {
-  transform: translateY(-12px) scale(1.02);
+  transform: translateY(-12px) scale(1.02) translateZ(0);
   box-shadow: 0 20px 60px rgba(255, 255, 255, 0.2), 0 0 40px rgba(255, 255, 255, 0.1);
 }
 
