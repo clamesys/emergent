@@ -306,7 +306,7 @@ After a drink.`,
       {currentPage === 'portfolio' ? (
         <>
           {/* Enhanced Navigation */}
-          <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${isScrolled ? 'glass-nav shadow-glow' : 'bg-transparent'}`}>
+          <nav className={`fixed top-0 w-full z-50 transition-all duration-500 ${isScrolled ? 'glass-nav shadow-glow' : 'bg-transparent'}`}>
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="flex justify-between items-center py-4">
                 <motion.div 
@@ -324,7 +324,7 @@ After a drink.`,
                     <motion.button
                       key={item}
                       onClick={() => scrollToSection(item.toLowerCase())}
-                      className={`hover:text-white transition-all duration-300 nav-item text-sm lg:text-base ${
+                      className={`hover:text-white transition-all duration-300 nav-item text-sm lg:text-base will-change-transform ${
                         activeSection === item.toLowerCase() ? 'text-white border-b-2 border-white' : 'text-gray-400'
                       }`}
                       initial={{ opacity: 0, y: -10 }}
@@ -338,7 +338,7 @@ After a drink.`,
                   ))}
                   <motion.button
                     onClick={() => setCurrentPage('poems')}
-                    className="text-gray-400 hover:text-white transition-all duration-300 nav-item text-sm lg:text-base"
+                    className="text-gray-400 hover:text-white transition-all duration-300 nav-item text-sm lg:text-base will-change-transform"
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5, delay: 0.6 }}
@@ -351,7 +351,7 @@ After a drink.`,
 
                 {/* Mobile Navigation Button */}
                 <motion.button
-                  className="md:hidden text-white p-2"
+                  className="md:hidden text-white p-2 will-change-transform"
                   onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
@@ -379,7 +379,7 @@ After a drink.`,
                       <motion.button
                         key={item}
                         onClick={() => scrollToSection(item.toLowerCase())}
-                        className={`block w-full text-left py-3 px-2 transition-all duration-300 nav-item ${
+                        className={`block w-full text-left py-3 px-2 transition-all duration-300 nav-item will-change-transform ${
                           activeSection === item.toLowerCase() ? 'text-white bg-white/10' : 'text-gray-400'
                         }`}
                         initial={{ opacity: 0, x: -20 }}
@@ -393,7 +393,7 @@ After a drink.`,
                     ))}
                     <motion.button
                       onClick={() => setCurrentPage('poems')}
-                      className="block w-full text-left py-3 px-2 text-gray-400 transition-all duration-300 nav-item"
+                      className="block w-full text-left py-3 px-2 text-gray-400 transition-all duration-300 nav-item will-change-transform"
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ duration: 0.3, delay: 0.6 }}
