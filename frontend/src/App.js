@@ -12,35 +12,71 @@ const App = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
+    let ticking = false;
+    let lastActiveSection = 'home';
+    let lastScrolled = false;
+
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-      
-      const sections = ['home', 'about', 'experience', 'projects', 'skills', 'contact'];
-      
-      // Check if we're near the bottom of the page
-      const isNearBottom = (window.innerHeight + window.scrollY) >= (document.body.offsetHeight - 100);
-      
-      if (isNearBottom) {
-        setActiveSection('contact');
-        return;
-      }
-      
-      // Find the section that's currently in view
-      const currentSection = sections.find(section => {
-        const element = document.getElementById(section);
-        if (element) {
-          const rect = element.getBoundingClientRect();
-          return rect.top <= 150 && rect.bottom >= 50;
-        }
-        return false;
-      });
-      
-      if (currentSection) {
-        setActiveSection(currentSection);
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          const scrollY = window.scrollY;
+          const currentScrolled = scrollY > 50;
+          
+          // Only update if state actually changed
+          if (currentScrolled !== lastScrolled) {
+            setIsScrolled(currentScrolled);
+            lastScrolled = currentScrolled;
+          }
+          
+          const sections = ['home', 'about', 'experience', 'projects', 'skills', 'contact'];
+          
+          // Check if we're near the bottom of the page
+          const isNearBottom = (window.innerHeight + scrollY) >= (document.body.offsetHeight - 100);
+          
+          let currentSection = lastActiveSection;
+          
+          if (isNearBottom) {
+            currentSection = 'contact';
+          } else {
+            // Find the section that's currently in view with better detection
+            const sectionElements = sections.map(section => {
+              const element = document.getElementById(section);
+              if (element) {
+                const rect = element.getBoundingClientRect();
+                return {
+                  section,
+                  top: rect.top,
+                  bottom: rect.bottom,
+                  height: rect.height
+                };
+              }
+              return null;
+            }).filter(Boolean);
+
+            // Find the section that's most visible
+            const visibleSection = sectionElements.find(({ top, bottom }) => {
+              return top <= 200 && bottom >= 200;
+            });
+
+            if (visibleSection) {
+              currentSection = visibleSection.section;
+            }
+          }
+          
+          // Only update if section actually changed
+          if (currentSection !== lastActiveSection) {
+            setActiveSection(currentSection);
+            lastActiveSection = currentSection;
+          }
+          
+          ticking = false;
+        });
+        ticking = true;
       }
     };
 
-    window.addEventListener('scroll', handleScroll);
+    // Add passive listener for better performance
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
