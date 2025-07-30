@@ -276,17 +276,19 @@ body {
   100% { transform: translateX(-40px) translateY(-40px); }
 }
 
-/* Enhanced Navigation */
+/* Enhanced Navigation with performance optimization */
 .nav-item {
   position: relative;
   font-family: 'JetBrains Mono', monospace;
   font-weight: 500;
   transition: all 0.3s ease;
+  will-change: transform, text-shadow;
+  transform: translateZ(0);
 }
 
 .nav-item:hover {
   text-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
-  transform: translateY(-1px);
+  transform: translateY(-1px) translateZ(0);
 }
 
 .nav-item::after {
@@ -299,6 +301,7 @@ body {
   background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
   transition: all 0.3s ease;
   transform: translateX(-50%);
+  will-change: width;
 }
 
 .nav-item:hover::after {
