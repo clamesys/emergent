@@ -246,12 +246,12 @@ After a drink.`,
     }
   ];
 
-  // Enhanced Animated Components
-  const AnimatedSection = ({ children, className = '', id = '' }) => {
+  // Enhanced Animated Components with memoization
+  const AnimatedSection = React.memo(({ children, className = '', id = '' }) => {
     const [ref, inView] = useInView({
       triggerOnce: true,
       threshold: 0.1,
-      rootMargin: '-100px 0px'
+      rootMargin: '-50px 0px'
     });
 
     return (
@@ -266,12 +266,13 @@ After a drink.`,
         {children}
       </motion.section>
     );
-  };
+  });
 
-  const AnimatedCard = ({ children, className = '', delay = 0 }) => {
+  const AnimatedCard = React.memo(({ children, className = '', delay = 0 }) => {
     const [ref, inView] = useInView({
       triggerOnce: true,
-      threshold: 0.1
+      threshold: 0.1,
+      rootMargin: '-20px 0px'
     });
 
     return (
@@ -281,24 +282,24 @@ After a drink.`,
         initial="hidden"
         animate={inView ? "visible" : "hidden"}
         variants={{
-          hidden: { y: 50, opacity: 0 },
+          hidden: { y: 30, opacity: 0 },
           visible: {
             y: 0,
             opacity: 1,
             transition: {
               type: "spring",
-              damping: 12,
-              stiffness: 100,
+              damping: 25,
+              stiffness: 120,
               delay: delay
             }
           }
         }}
-        whileHover={{ y: -5, transition: { duration: 0.2 } }}
+        whileHover={{ y: -3, transition: { duration: 0.2 } }}
       >
         {children}
       </motion.div>
     );
-  };
+  });
 
   return (
     <div className="min-h-screen bg-black text-white font-primary">
