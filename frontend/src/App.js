@@ -85,43 +85,43 @@ const App = () => {
     setMobileMenuOpen(false);
   };
 
-  // Animation variants
-  const containerVariants = {
+  // Optimized Animation variants
+  const containerVariants = useMemo(() => ({
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.3
+        staggerChildren: 0.05,
+        delayChildren: 0.1
       }
     }
-  };
+  }), []);
 
-  const itemVariants = {
+  const itemVariants = useMemo(() => ({
     hidden: { y: 20, opacity: 0 },
     visible: {
       y: 0,
       opacity: 1,
       transition: {
         type: "spring",
-        damping: 12,
-        stiffness: 100
+        damping: 25,
+        stiffness: 120
       }
     }
-  };
+  }), []);
 
-  const slideVariants = {
-    hidden: { x: -100, opacity: 0 },
+  const slideVariants = useMemo(() => ({
+    hidden: { x: -50, opacity: 0 },
     visible: {
       x: 0,
       opacity: 1,
       transition: {
         type: "spring",
-        damping: 12,
-        stiffness: 100
+        damping: 25,
+        stiffness: 120
       }
     }
-  };
+  }), []);
 
   const longPoems = [
     {
