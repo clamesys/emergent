@@ -15,8 +15,14 @@ const App = () => {
     let ticking = false;
     let lastActiveSection = 'home';
     let lastScrolled = false;
+    let scrollTimeout;
 
     const handleScroll = () => {
+      // Clear any existing timeout
+      if (scrollTimeout) {
+        clearTimeout(scrollTimeout);
+      }
+
       if (!ticking) {
         requestAnimationFrame(() => {
           const scrollY = window.scrollY;
@@ -28,46 +34,49 @@ const App = () => {
             lastScrolled = currentScrolled;
           }
           
-          const sections = ['home', 'about', 'experience', 'projects', 'skills', 'contact'];
-          
-          // Check if we're near the bottom of the page
-          const isNearBottom = (window.innerHeight + scrollY) >= (document.body.offsetHeight - 100);
-          
-          let currentSection = lastActiveSection;
-          
-          if (isNearBottom) {
-            currentSection = 'contact';
-          } else {
-            // Find the section that's currently in view with better detection
-            const sectionElements = sections.map(section => {
-              const element = document.getElementById(section);
-              if (element) {
-                const rect = element.getBoundingClientRect();
-                return {
-                  section,
-                  top: rect.top,
-                  bottom: rect.bottom,
-                  height: rect.height
-                };
+          // Debounce section detection during fast scrolling
+          scrollTimeout = setTimeout(() => {
+            const sections = ['home', 'about', 'experience', 'projects', 'skills', 'contact'];
+            
+            // Check if we're near the bottom of the page
+            const isNearBottom = (window.innerHeight + scrollY) >= (document.body.offsetHeight - 100);
+            
+            let currentSection = lastActiveSection;
+            
+            if (isNearBottom) {
+              currentSection = 'contact';
+            } else {
+              // Find the section that's currently in view with better detection
+              const sectionElements = sections.map(section => {
+                const element = document.getElementById(section);
+                if (element) {
+                  const rect = element.getBoundingClientRect();
+                  return {
+                    section,
+                    top: rect.top,
+                    bottom: rect.bottom,
+                    height: rect.height
+                  };
+                }
+                return null;
+              }).filter(Boolean);
+
+              // Find the section that's most visible
+              const visibleSection = sectionElements.find(({ top, bottom }) => {
+                return top <= 200 && bottom >= 200;
+              });
+
+              if (visibleSection) {
+                currentSection = visibleSection.section;
               }
-              return null;
-            }).filter(Boolean);
-
-            // Find the section that's most visible
-            const visibleSection = sectionElements.find(({ top, bottom }) => {
-              return top <= 200 && bottom >= 200;
-            });
-
-            if (visibleSection) {
-              currentSection = visibleSection.section;
             }
-          }
-          
-          // Only update if section actually changed
-          if (currentSection !== lastActiveSection) {
-            setActiveSection(currentSection);
-            lastActiveSection = currentSection;
-          }
+            
+            // Only update if section actually changed
+            if (currentSection !== lastActiveSection) {
+              setActiveSection(currentSection);
+              lastActiveSection = currentSection;
+            }
+          }, 100); // Debounce section detection by 100ms
           
           ticking = false;
         });
@@ -77,7 +86,13 @@ const App = () => {
 
     // Add passive listener for better performance
     window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+    
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      if (scrollTimeout) {
+        clearTimeout(scrollTimeout);
+      }
+    };
   }, []);
 
   const scrollToSection = (sectionId) => {
